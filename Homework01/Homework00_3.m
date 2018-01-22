@@ -1,5 +1,5 @@
 %Katelyn Charbonneau
-%CPE490 Software Defined Radio Homework 01 Problem 2
+%CPE490 Software Defined Radio Homework 01 Problem 3
 
 clear all
 clc
