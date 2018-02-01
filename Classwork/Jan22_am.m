@@ -16,22 +16,24 @@ Am = 1;
 mu = 0.5;
 t = [0:Ts:2-Ts];
 
-ct = Ac*cos(2*pi*fc*t);
-mt = Am*cos(2*pi*fm*t);
+DSB_Amp_Mod(Fs, fm, fc, Am, Ac, mu, t);
+
+%ct = Ac*cos(2*pi*fc*t);
+%mt = Am*cos(2*pi*fm*t);
 
 %AM
-st = Ac.*(1+mu.*cos(2*pi*fm.*t)).*cos(2*pi*fc.*t);
+%st = Ac.*(1+mu.*cos(2*pi*fm.*t)).*cos(2*pi*fc.*t);
 
 %DSB
-st2 = mt.*ct;
+%st2 = mt.*ct;
 
-L = length(st);
-f = Fs*((-L/2):(L/2-1))/L;
+%L = length(st);
+%f = Fs*((-L/2):(L/2-1))/L;
 
 %figure(1)
 %plot(st)
 
-ft = fft(st);
+%ft = fft(st);
 
 %figure(2)
 %subplot(3,1,1), plot(f, abs(fftshift(fft(mt, L)))/(L));
@@ -43,7 +45,7 @@ ft = fft(st);
 %replace with st for s signal, also normalize signal (divide by number of
 %points we take)
 
-figure(3)
-subplot(3,1,1), plot(f, abs(fftshift(fft(mt, L)))/(L));
-subplot(3,1,2), plot(f, abs(fftshift(fft(ct, L)))/(L));
-subplot(3,1,3), plot(f, abs(fftshift(fft(st2, L)))/(L));
+%figure(3)
+%subplot(3,1,1), plot(f, abs(fftshift(fft(mt, L)))/(L));
+%subplot(3,1,2), plot(f, abs(fftshift(fft(ct, L)))/(L));
+%subplot(3,1,3), plot(f, abs(fftshift(fft(st2, L)))/(L));
