@@ -1,0 +1,68 @@
+#!/usr/bin/env python
+# Started 3/5/2018
+# First receive python script
+
+from gnuradio import analog
+from gnuradio import blocks
+from gnuradio import audio
+from gnuradio import eng_notation
+from gnuradio import gr
+from gnuradio import uhd
+from gnuradio import filter
+from optparse import OptionParser
+from gnuradio.eng_option import eng_option
+from gnuradio.filter import firdes
+import time
+
+class usrp_wfm_rx_1(gr.top_block):
+
+	def __init__(self, freq=2.483e9, samp_rate=441e3):
+		gr.top_block.__init__(self)
+
+		## Parameters
+		self.freq = freq
+		self.samp_rate = samp_rate
+
+		## Variables
+		self.audio_decim = audio_decim = 10
+
+		## Blocks
+		# USRP Source
+		self.usrp_source_0 = uhd.usrp_source(
+			",".join(("", "")),
+			uhd.stream_args(
+				cpu_format="fc32",
+				channels=range(1),
+			),)
+		self.usrp_source_0.set_samp_rate(samp_rate)
+		self.usrp_source_0.set_center_freq(freq, 0)
+		self.usrp_source_0.set_gain(3, 0)
+		self.usrp_source_0.set_antenna("TX/RX", 0)
+		
+        # Low Pass Filter
+		self.low_pass_filter_0 = filter.fir_filter_ccf(1, firdes.low_pass(
+			1, samp_rate, 115e3, 30e3, firdes.WIN_HANN, 6.76))
+
+		# Audio Sink
+		self.audio_sink_0 = audio.sink(int(samp_rate/audio_decim))
+
+		# WFM Block
+		self.wfm_rcv_0 = analog.wfm_rcv(
+			quad_rate=samp_rate,
+            audio_decimation=audio_decim)
+		
+		## Connections
+		self.connect(self.usrp_source_0, self.low_pass_filter_0)
+		self.connect(self.low_pass_filter_0, self.wfm_rcv_0)
+		self.connect(self.wfm_rcv_0, self.audio_sink_0)
+
+
+
+
+
+if __name__ == '__main__':
+    tb = usrp_wfm_rx_1()
+    try:
+        tb.run()
+    except KeyboardInterrupt:
+        pass
