@@ -98,6 +98,10 @@ class usrp_wfm_tx_1(gr.top_block):
 		self.usrp_sink_0.set_center_freq(freq, 0)
 		self.usrp_sink_0.set_gain(10, 0)
 		self.usrp_sink_0.set_antenna("TX/RX", 0)
+
+		# UDP Sink/Source
+		self.udp_source_0 = blocks.udp_source(gr.sizeof_float*1, "localhost", 1024, 1472, False)
+		self.udp_sink_0 = blocks.udp_sink(gr.sizeof_float*1, "localhost", 1024, 1472, False)
 		
 		# Audio Source - input from microphone
 		self.audio_source_0 = audio.source(44100, "pulse", False)
@@ -110,7 +114,8 @@ class usrp_wfm_tx_1(gr.top_block):
 			max_dev=75e3)
 		
 		## Connections
-		self.connect(self.audio_source_0, self.wfm_tx_0)
+		self.connect(self.audio_source_0, self.udp_sink_0)
+		self.connect(self.udp_source_0, self.wfm_tx_0)
 		self.connect(self.wfm_tx_0, self.usrp_sink_0)
 
 ##################################################
