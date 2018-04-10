@@ -10,3 +10,10 @@
 *.rar
 *.tar
 *.zip
+
+# Spectrum Analyzer gnuradio-companion Output Files #
+############
+# These files are very large and just contain raw data
+# not to be committed to the repository
+
+spectrum_analyzer/*.bin
