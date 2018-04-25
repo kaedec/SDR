@@ -2,7 +2,7 @@
 ##################################################
 # Gnuradio Python Flow Graph
 # Title: Spectrum Analyzer
-# Generated: Mon Apr  9 15:23:23 2018
+# Generated: Wed Apr 18 14:22:53 2018
 ##################################################
 
 from gnuradio import blocks
@@ -52,7 +52,7 @@ class spectrum_analyzer(grc_wxgui.top_block_gui):
         self.Add(self.wxgui_scopesink2_0.win)
         self.wxgui_fftsink2_0 = fftsink2.fft_sink_c(
         	self.GetWin(),
-        	baseband_freq=0,
+        	baseband_freq=freq,
         	y_per_div=10,
         	y_divs=10,
         	ref_level=0,
@@ -81,22 +81,20 @@ class spectrum_analyzer(grc_wxgui.top_block_gui):
         self.fft_vxx_0 = fft.fft_vcc(num_fft, True, (window.blackmanharris(1024)), True, 1)
         self.blocks_vector_to_stream_0 = blocks.vector_to_stream(gr.sizeof_gr_complex*1, num_fft)
         self.blocks_stream_to_vector_0 = blocks.stream_to_vector(gr.sizeof_gr_complex*1, num_fft)
-        self.blocks_nlog10_ff_0 = blocks.nlog10_ff(10, 1, 0)
-        self.blocks_file_sink_0 = blocks.file_sink(gr.sizeof_float*1, "/home/sdr/Documents/SDR/spectrum_analyzer/spectrum_data_50dB_1000voice.bin", False)
+        self.blocks_file_sink_0 = blocks.file_sink(gr.sizeof_float*1, "/home/sdr/Documents/SDR/spectrum_analyzer/spectrum_data_50dB_shiftvoice.bin", False)
         self.blocks_file_sink_0.set_unbuffered(False)
-        self.blocks_complex_to_mag_squared_0 = blocks.complex_to_mag_squared(1)
+        self.blocks_complex_to_mag_0 = blocks.complex_to_mag(1)
 
         ##################################################
         # Connections
         ##################################################
         self.connect((self.uhd_usrp_source_0, 0), (self.wxgui_fftsink2_0, 0))
-        self.connect((self.uhd_usrp_source_0, 0), (self.blocks_stream_to_vector_0, 0))
         self.connect((self.blocks_stream_to_vector_0, 0), (self.fft_vxx_0, 0))
+        self.connect((self.blocks_vector_to_stream_0, 0), (self.blocks_complex_to_mag_0, 0))
+        self.connect((self.blocks_complex_to_mag_0, 0), (self.wxgui_scopesink2_0, 0))
+        self.connect((self.blocks_complex_to_mag_0, 0), (self.blocks_file_sink_0, 0))
+        self.connect((self.uhd_usrp_source_0, 0), (self.blocks_stream_to_vector_0, 0))
         self.connect((self.fft_vxx_0, 0), (self.blocks_vector_to_stream_0, 0))
-        self.connect((self.blocks_vector_to_stream_0, 0), (self.blocks_complex_to_mag_squared_0, 0))
-        self.connect((self.blocks_complex_to_mag_squared_0, 0), (self.blocks_nlog10_ff_0, 0))
-        self.connect((self.blocks_nlog10_ff_0, 0), (self.blocks_file_sink_0, 0))
-        self.connect((self.blocks_nlog10_ff_0, 0), (self.wxgui_scopesink2_0, 0))
 
 
 
@@ -105,8 +103,8 @@ class spectrum_analyzer(grc_wxgui.top_block_gui):
 
     def set_samp_rate(self, samp_rate):
         self.samp_rate = samp_rate
-        self.wxgui_scopesink2_0.set_sample_rate(self.samp_rate)
         self.uhd_usrp_source_0.set_samp_rate(self.samp_rate)
+        self.wxgui_scopesink2_0.set_sample_rate(self.samp_rate)
         self.wxgui_fftsink2_0.set_sample_rate(self.samp_rate)
 
     def get_num_fft(self):
@@ -121,6 +119,7 @@ class spectrum_analyzer(grc_wxgui.top_block_gui):
     def set_freq(self, freq):
         self.freq = freq
         self.uhd_usrp_source_0.set_center_freq(self.freq, 0)
+        self.wxgui_fftsink2_0.set_baseband_freq(self.freq)
 
 if __name__ == '__main__':
     import ctypes
