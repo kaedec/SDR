@@ -34,6 +34,7 @@ from transmit_path import transmit_path
 from uhd_interface import uhd_transmitter
 
 import time, struct, sys
+from time import sleep
 
 #import os 
 #print os.getpid()
@@ -134,7 +135,8 @@ def main():
         else:
             data = source_file.read(pkt_size - 2)
             if data == '':
-                break;
+                sleep(1)
+                #break;
 
         print "pktno = %4d" % (
         pktno)

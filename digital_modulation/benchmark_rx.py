@@ -106,21 +106,21 @@ def main():
             myfile.write(i)
         myfile.close()
 
-#Socket port
-#clientHost = 'localhost'
-#clientPort = 2009
-#dgramSock = socket.socket( socket.AF_INET, socket.SOCK_DGRAM )
-#
-#dgramSock.connect((clientHost,clientPort))
-#
-#for ndx_data in rxdata:
-#dgramSock.sendto (str(payload[2:]), (clientHost, clientPort) )
-#data = dgramSock.recv(4096)
-#print data
-#dgramSock.Close()
-#
-#
-#sudo vlc udp://@localhost:2009
+        #Socket port
+        #clientHost = 'localhost'
+        #clientPort = 2009
+        #dgramSock = socket.socket( socket.AF_INET, socket.SOCK_DGRAM )
+        
+        #dgramSock.connect((clientHost,clientPort))
+        
+        #for ndx_data in rxdata:
+        #dgramSock.sendto (str(payload[2:]), (clientHost, clientPort) )
+        #data = dgramSock.recv(4096)
+        #print data
+        #dgramSock.Close()
+        
+        
+        #sudo vlc udp://@localhost:2009
 
     demods = digital.modulation_utils.type_1_demods()
 
