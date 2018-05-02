@@ -35,6 +35,7 @@ from uhd_interface import uhd_receiver
 
 import struct
 import sys
+import socket
 
 payload = []
 
@@ -96,17 +97,32 @@ def main():
         print "ok = %5s  pktno = %4d  n_rcvd = %4d  n_right = %4d" % (
             ok, pktno, n_rcvd, n_right)
 
+        #write data to a file
+        rxdata.append(payload[2:])
+        #print rxdata
+        myfile = open("rxdata", "w")
+
+        for i in rxdata:
+            myfile.write(i)
+        myfile.close()
+
+#Socket port
+#clientHost = 'localhost'
+#clientPort = 2009
+#dgramSock = socket.socket( socket.AF_INET, socket.SOCK_DGRAM )
+#
+#dgramSock.connect((clientHost,clientPort))
+#
+#for ndx_data in rxdata:
+#dgramSock.sendto (str(payload[2:]), (clientHost, clientPort) )
+#data = dgramSock.recv(4096)
+#print data
+#dgramSock.Close()
+#
+#
+#sudo vlc udp://@localhost:2009
+
     demods = digital.modulation_utils.type_1_demods()
-
-	#write data to a file
-    rxdata.append(payload[2:])
-
-    myfile = open("rxdata.txt", "w")
-
-    for item in rxdata:
-        myfile.write(item)
-
-	myfile.close()
 
     # Create Options Parser:
     parser = OptionParser (option_class=eng_option, conflict_handler="resolve")
